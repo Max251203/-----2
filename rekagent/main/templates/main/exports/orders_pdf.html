@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        @page {
+            size: a4 landscape;
+            margin: 1cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ title }}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Дата</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Скидка</th>
+                <th>Итого</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.client.name }}</td>
+                <td>{{ order.service.name }}</td>
+                <td>{{ order.date_received|date:"d.m.Y" }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.service.price|floatformat:2 }}</td>
+                <td>{{ order.discount }}%</td>
+                <td>{{ order.total|floatformat:2 }}</td>
+                <td>
+                    {% if order.date_executed %}
+                    Выполнен
+                    {% else %}
+                    В процессе
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Отчет сформирован: {% now "d.m.Y H:i" %}
+    </div>
+</body>
+
+</html>

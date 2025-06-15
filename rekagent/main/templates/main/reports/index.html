@@ -1,0 +1,122 @@
+{% extends "main/base.html" %}
+{% block title %}Отчёты{% endblock %}
+{% block content %}
+<h2>Отчёты по клиентам</h2>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'export_clients_pdf' %}" class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf"></i> Экспорт в PDF
+    </a>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Клиент</th>
+                <th>Кол-во заказов</th>
+                <th>Сумма заказов</th>
+                <th>Кол-во оплат</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in client_stats %}
+            <tr>
+                <td>{{ stat.client.name }}</td>
+                <td>{{ stat.total_orders }}</td>
+                <td>{{ stat.total_sum|floatformat:2 }}</td>
+                <td>{{ stat.total_payments }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Нет данных</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2 class="mt-5">Рейтинг услуг</h2>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'export_services_pdf' %}" class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf"></i> Экспорт в PDF
+    </a>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Услуга</th>
+                <th>Кол-во заказов</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in service_stats %}
+            <tr>
+                <td>{{ stat.service.name }}</td>
+                <td>{{ stat.count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">Нет данных</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2 class="mt-5">Заказы с расчетом оплаты</h2>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'export_orders_pdf' %}" class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf"></i> Экспорт в PDF
+    </a>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Дата</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Скидка</th>
+                <th>Итого</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.client.name }}</td>
+                <td>{{ order.service.name }}</td>
+                <td>{{ order.date_received }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.service.price|floatformat:2 }}</td>
+                <td>{{ order.discount }}%</td>
+                <td>
+                    {% with total=order.service.price|floatformat:2|default:0|stringformat:"f"|add:"0" %}
+                    {% with discount=order.discount|default:0|stringformat:"f"|add:"0" %}
+                    {% with quantity=order.quantity|stringformat:"f"|add:"0" %}
+                    {{
+                    total|floatformat:2|multiply:quantity|multiply:discount|divide:100|subtract:from:total|floatformat:2
+                    }}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {% if order.date_executed %}
+                    <span class="badge bg-success">Выполнен</span>
+                    {% else %}
+                    <span class="badge bg-warning">В процессе</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">Нет данных</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "main/base.html" %}
+{% block title %}Панель администратора{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Панель администратора</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Пользователи и профили</h5>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'admin_users' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-people"></i> Пользователи
+                                </a>
+                                <a href="{% url 'admin_profiles' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-person-badge"></i> Профили
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">Клиенты и услуги</h5>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'client_list' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-building"></i> Клиенты
+                                </a>
+                                <a href="{% url 'service_list' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-tools"></i> Услуги
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">Заказы и платежи</h5>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'order_list' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-cart"></i> Заказы
+                                </a>
+                                <a href="{% url 'payment_list' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-credit-card"></i> Платежи
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="mb-0">Отчеты</h5>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'reports' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-bar-chart"></i> Общие отчеты
+                                </a>
+                                <a href="{% url 'orders_by_period' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-calendar-check"></i> Заказы за период
+                                </a>
+                                <a href="{% url 'payments_by_period' %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-cash-coin"></i> Платежи за период
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">Статистика</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h3 class="display-4">{{ client_count }}</h3>
+                                                <p class="lead">Клиентов</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h3 class="display-4">{{ order_count }}</h3>
+                                                <p class="lead">Заказов</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h3 class="display-4">{{ service_count }}</h3>
+                                                <p class="lead">Услуг</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h3 class="display-4">{{ payment_count }}</h3>
+                                                <p class="lead">Платежей</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

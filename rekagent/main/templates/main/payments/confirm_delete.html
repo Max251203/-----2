@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block title %}Удаление платежа{% endblock %}
+{% block content %}
+<div class="card form-compact">
+    <div class="card-body">
+        <h2>Удалить платёж</h2>
+        <p>Вы уверены, что хотите удалить платёж <strong>#{{ payment.pk }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">🗑️ Удалить</button>
+                <a href="{% url 'payment_list' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

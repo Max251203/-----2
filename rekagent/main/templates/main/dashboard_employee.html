@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% block title %}Панель сотрудника{% endblock %}
+{% block content %}
+<h2>Здравствуйте, {{ profile.user.username }} (сотрудник)</h2>
+{% if profile.linked_employee %}
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">Ваш профиль</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Фамилия:</b> {{ profile.linked_employee.last_name }}</li>
+            <li class="list-group-item"><b>Имя:</b> {{ profile.linked_employee.first_name }}</li>
+            <li class="list-group-item"><b>Email:</b> {{ profile.linked_employee.email }}</li>
+            <li class="list-group-item"><b>Должность:</b> {{ profile.linked_employee.position }}</li>
+            <li class="list-group-item"><b>Отдел:</b> {{ profile.linked_employee.department }}</li>
+            <li class="list-group-item"><b>Рабочий телефон:</b> {{ profile.linked_employee.work_phone }}</li>
+            <li class="list-group-item"><b>Домашний телефон:</b> {{ profile.linked_employee.home_phone }}</li>
+        </ul>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning mt-3">Профиль сотрудника не заполнен.</div>
+{% endif %}
+<a href="{% url 'logout' %}" class="btn btn-danger mt-3">Выйти</a>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+{% block title %}Кабинет клиента{% endblock %}
+{% block content %}
+<h2>Здравствуйте, {{ profile.user.username }}</h2>
+{% if profile.linked_client %}
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">Ваш профиль</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Название:</b> {{ profile.linked_client.name }}</li>
+            <li class="list-group-item"><b>Контактное лицо:</b> {{ profile.linked_client.contact_person }}</li>
+            <li class="list-group-item"><b>Email:</b> {{ profile.linked_client.email }}</li>
+            <li class="list-group-item"><b>Телефон:</b> {{ profile.linked_client.phone }}</li>
+            <li class="list-group-item"><b>Адрес:</b> {{ profile.linked_client.address }}</li>
+        </ul>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning mt-3">Профиль клиента не заполнен.</div>
+{% endif %}
+<a href="{% url 'logout' %}" class="btn btn-danger mt-3">Выйти</a>
+{% endblock %}

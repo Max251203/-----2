@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% block title %}Заказы{% endblock %}
+{% block content %}
+<h2>{% if user.profile.role == 'client' %}Мои заказы{% else %}Список заказов{% endif %}</h2>
+
+{% if user.profile.role == 'employee' %}
+<a href="{% url 'order_create' %}" class="btn btn-success mb-3">➕ Добавить заказ</a>
+{% endif %}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                {% if user.profile.role == 'employee' %}<th>Клиент</th>{% endif %}
+                <th>Услуга</th>
+                <th>Дата принятия</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Скидка</th>
+                <th>Итого</th>
+                <th>Статус</th>
+                {% if user.profile.role == 'employee' %}
+                <th>Действия</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                {% if user.profile.role == 'employee' %}<td>{{ order.client }}</td>{% endif %}
+                <td>{{ order.service }}</td>
+                <td>{{ order.date_received }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.service.price }}</td>
+                <td>{{ order.discount }}%</td>
+                <td>
+                    {% with total=order.service.price|floatformat:2|default:0|stringformat:"f"|add:"0" %}
+                    {% with discount=order.discount|default:0|stringformat:"f"|add:"0" %}
+                    {% with quantity=order.quantity|stringformat:"f"|add:"0" %}
+                    {{ total|floatformat:2 }} × {{ quantity }} × (1 - {{ discount }}%) =
+                    {{
+                    total|floatformat:2|multiply:quantity|multiply:discount|divide:100|subtract:from:total|floatformat:2
+                    }}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {% if order.date_executed %}
+                    <span class="badge bg-success">Выполнен</span>
+                    {% else %}
+                    <span class="badge bg-warning">В процессе</span>
+                    {% endif %}
+                </td>
+                {% if user.profile.role == 'employee' %}
+                <td>
+                    <a href="{% url 'order_update' order.pk %}" class="btn btn-sm btn-primary">✏️</a>
+                    <a href="{% url 'order_delete' order.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{% if user.profile.role == 'employee' %}9{% else %}8{% endif %}">Заказы не найдены</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

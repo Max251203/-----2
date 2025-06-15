@@ -1,0 +1,44 @@
+{% extends "main/base.html" %}
+{% block title %}Профиль администратора{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Профиль администратора</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Информация о пользователе</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Логин:</b> {{ user.username }}</li>
+                            <li class="list-group-item"><b>Email:</b> {{ user.email }}</li>
+                            <li class="list-group-item"><b>Имя:</b> {{ user.first_name }}</li>
+                            <li class="list-group-item"><b>Фамилия:</b> {{ user.last_name }}</li>
+                            <li class="list-group-item"><b>Статус:</b> Администратор</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Административные функции</h5>
+                        <div class="list-group">
+                            <a href="{% url 'admin_users' %}" class="list-group-item list-group-item-action">
+                                <i class="bi bi-people"></i> Управление пользователями
+                            </a>
+                            <a href="{% url 'admin_profiles' %}" class="list-group-item list-group-item-action">
+                                <i class="bi bi-person-badge"></i> Управление профилями
+                            </a>
+                            <a href="{% url 'client_list' %}" class="list-group-item list-group-item-action">
+                                <i class="bi bi-building"></i> Управление клиентами
+                            </a>
+                            <a href="{% url 'service_list' %}" class="list-group-item list-group-item-action">
+                                <i class="bi bi-tools"></i> Управление услугами
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

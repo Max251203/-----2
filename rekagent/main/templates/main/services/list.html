@@ -1,0 +1,37 @@
+{% extends "main/base.html" %}
+{% block title %}Услуги{% endblock %}
+{% block content %}
+<h2>Список услуг</h2>
+<a href="{% url 'service_create' %}" class="btn btn-success mb-3">➕ Добавить услугу</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Ед. изм.</th>
+                <th>Материал</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.price }}</td>
+                <td>{{ service.unit }}</td>
+                <td>{{ service.material }}</td>
+                <td>
+                    <a href="{% url 'service_update' service.pk %}" class="btn btn-sm btn-primary">✏️</a>
+                    <a href="{% url 'service_delete' service.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Услуги не найдены</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "main/base.html" %}
+{% block title %}Панель сотрудника{% endblock %}
+{% block content %}
+<h2>Панель сотрудника</h2>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Информация о сотруднике</h5>
+            </div>
+            <div class="card-body">
+                {% if employee %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Фамилия:</b> {{ employee.last_name }}</li>
+                    <li class="list-group-item"><b>Имя:</b> {{ employee.first_name }}</li>
+                    <li class="list-group-item"><b>Отчество:</b> {{ employee.middle_name }}</li>
+                    <li class="list-group-item"><b>Email:</b> {{ employee.email }}</li>
+                    <li class="list-group-item"><b>Должность:</b> {{ employee.position }}</li>
+                    <li class="list-group-item"><b>Отдел:</b> {{ employee.department }}</li>
+                </ul>
+                {% else %}
+                <div class="alert alert-warning">Профиль сотрудника не заполнен.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Статистика</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Всего заказов:</b> {{ stats.total_orders }}</li>
+                    <li class="list-group-item"><b>Выполнено заказов:</b> {{ stats.completed_orders }}</li>
+                    <li class="list-group-item"><b>В процессе:</b> {{ stats.pending_orders }}</li>
+                    <li class="list-group-item"><b>Общая сумма заказов:</b> {{ stats.total_sum|floatformat:2 }}</li>
+                    <li class="list-group-item"><b>Всего клиентов:</b> {{ stats.total_clients }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Последние заказы</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Клиент</th>
+                                <th>Услуга</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>{{ order.client }}</td>
+                                <td>{{ order.service }}</td>
+                                <td>{{ order.date_received }}</td>
+                                <td>
+                                    {% if order.date_executed %}
+                                    <span class="badge bg-success">Выполнен</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">В процессе</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Заказы не найдены</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="{% url 'order_list' %}" class="btn btn-primary">Все заказы</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Последние платежи</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Клиент</th>
+                                <th>Заказ</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in recent_payments %}
+                            <tr>
+                                <td>{{ payment.order.client }}</td>
+                                <td>{{ payment.order.service }}</td>
+                                <td>{{ payment.date_paid }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">Платежи не найдены</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="{% url 'payment_list' %}" class="btn btn-primary">Все платежи</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+{% block title %}Профиль сотрудника{% endblock %}
+{% block content %}
+<h2>Профиль сотрудника</h2>
+{% if employee %}
+<ul class="list-group form-compact mt-3">
+    <li class="list-group-item"><b>Фамилия:</b> {{ employee.last_name }}</li>
+    <li class="list-group-item"><b>Имя:</b> {{ employee.first_name }}</li>
+    <li class="list-group-item"><b>Email:</b> {{ employee.email }}</li>
+    <li class="list-group-item"><b>Должность:</b> {{ employee.position }}</li>
+    <li class="list-group-item"><b>Отдел:</b> {{ employee.department }}</li>
+    <li class="list-group-item"><b>Рабочий телефон:</b> {{ employee.work_phone }}</li>
+    <li class="list-group-item"><b>Домашний телефон:</b> {{ employee.home_phone }}</li>
+</ul>
+{% else %}
+<div class="alert alert-warning mt-3">Профиль сотрудника не заполнен.</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% block title %}Профиль клиента{% endblock %}
+{% block content %}
+<h2>Профиль клиента</h2>
+{% if client %}
+<ul class="list-group form-compact mt-3">
+    <li class="list-group-item"><b>Название:</b> {{ client.name }}</li>
+    <li class="list-group-item"><b>Контактное лицо:</b> {{ client.contact_person }}</li>
+    <li class="list-group-item"><b>Email:</b> {{ client.email }}</li>
+    <li class="list-group-item"><b>Телефон:</b> {{ client.phone }}</li>
+    <li class="list-group-item"><b>Адрес:</b> {{ client.address }}</li>
+</ul>
+{% else %}
+<div class="alert alert-warning mt-3">Профиль клиента не заполнен.</div>
+{% endif %}
+{% endblock %}

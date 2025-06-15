@@ -1,0 +1,100 @@
+{% extends "main/base.html" %}
+{% block title %}Мой кабинет{% endblock %}
+{% block content %}
+<h2>Личный кабинет клиента</h2>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Информация о клиенте</h5>
+            </div>
+            <div class="card-body">
+                {% if client %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Название:</b> {{ client.name }}</li>
+                    <li class="list-group-item"><b>Контактное лицо:</b> {{ client.contact_person }}</li>
+                    <li class="list-group-item"><b>Email:</b> {{ client.email }}</li>
+                    <li class="list-group-item"><b>Телефон:</b> {{ client.phone }}</li>
+                    <li class="list-group-item"><b>Адрес:</b> {{ client.address }}</li>
+                </ul>
+                {% else %}
+                <div class="alert alert-warning">Профиль клиента не заполнен.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Статистика</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Всего заказов:</b> {{ stats.total_orders }}</li>
+                    <li class="list-group-item"><b>Выполнено заказов:</b> {{ stats.completed_orders }}</li>
+                    <li class="list-group-item"><b>В процессе:</b> {{ stats.pending_orders }}</li>
+                    <li class="list-group-item"><b>Общая сумма заказов:</b> {{ stats.total_sum|floatformat:2 }}</li>
+                    <li class="list-group-item"><b>Оплачено:</b> {{ stats.total_paid|floatformat:2 }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Последние заказы</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Услуга</th>
+                                <th>Дата</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>{{ order.service }}</td>
+                                <td>{{ order.date_received }}</td>
+                                <td>
+                                    {% with total=order.service.price|floatformat:2|default:0|stringformat:"f"|add:"0"
+                                    %}
+                                    {% with discount=order.discount|default:0|stringformat:"f"|add:"0" %}
+                                    {% with quantity=order.quantity|stringformat:"f"|add:"0" %}
+                                    {{
+                                    total|floatformat:2|multiply:quantity|multiply:discount|divide:100|subtract:from:total|floatformat:2
+                                    }}
+                                    {% endwith %}
+                                    {% endwith %}
+                                    {% endwith %}
+                                </td>
+                                <td>
+                                    {% if order.date_executed %}
+                                    <span class="badge bg-success">Выполнен</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">В процессе</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Заказы не найдены</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="{% url 'order_list' %}" class="btn btn-primary">Все заказы</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

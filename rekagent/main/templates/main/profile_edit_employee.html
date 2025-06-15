@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% block title %}Редактировать профиль сотрудника{% endblock %}
+{% block content %}
+<h2>Редактировать профиль сотрудника</h2>
+<form method="post" class="form-compact mt-3">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3 row align-items-center">
+        <label class="col-sm-4 col-form-label">{{ field.label }}</label>
+        <div class="col-sm-8">
+            {{ field }}
+            {% if field.errors %}
+            <div class="text-danger small">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="text-center">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">Назад</a>
+    </div>
+</form>
+{% endblock %}
