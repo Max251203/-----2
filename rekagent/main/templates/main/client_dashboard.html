@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load custom_filters %}
 {% block title %}Мой кабинет{% endblock %}
 {% block content %}
 <h2>Личный кабинет клиента</h2>
@@ -70,7 +71,7 @@
                                     {% with discount=order.discount|default:0|stringformat:"f"|add:"0" %}
                                     {% with quantity=order.quantity|stringformat:"f"|add:"0" %}
                                     {{
-                                    total|floatformat:2|multiply:quantity|multiply:discount|divide:100|subtract:from:total|floatformat:2
+                                    total|multiply:quantity|multiply:discount|divide:100|subtract_from:total|floatformat:2
                                     }}
                                     {% endwith %}
                                     {% endwith %}

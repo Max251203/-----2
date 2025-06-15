@@ -95,6 +95,10 @@
             color: #e9ecef;
         }
 
+        body.bg-dark .form-control::placeholder {
+            color: #6c757d;
+        }
+
         body.bg-dark .input-group-text {
             background-color: #343a40;
             border-color: #495057;
@@ -111,6 +115,29 @@
             background-color: #343a40;
         }
 
+        /* Стили для модальных окон и подтверждений */
+        body.bg-dark .modal-content {
+            background-color: #2c3034;
+            color: #e9ecef;
+        }
+
+        body.bg-dark .modal-header {
+            border-color: #373b3e;
+        }
+
+        body.bg-dark .modal-footer {
+            border-color: #373b3e;
+        }
+
+        /* Стили для текста в профиле */
+        body.bg-dark .text-dark {
+            color: #e9ecef !important;
+        }
+
+        body.bg-dark .text-muted {
+            color: #adb5bd !important;
+        }
+
         /* Стили для админки */
         .admin-container {
             padding: 20px;
@@ -122,6 +149,32 @@
         body.bg-dark .admin-container {
             background-color: #2c3034;
             border-color: #373b3e;
+        }
+
+        /* Стили для кнопок навигации */
+        .back-button {
+            margin-top: 1rem;
+        }
+
+        /* Стили для форм подтверждения */
+        .confirmation-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        body.bg-dark .confirmation-text {
+            color: #e9ecef;
+        }
+
+        /* Стили для алертов */
+        body.bg-dark .alert {
+            color: #212529;
+        }
+
+        body.bg-dark .alert-secondary {
+            color: #e9ecef;
+            background-color: #495057;
+            border-color: #495057;
         }
     </style>
     {% block extra_head %}{% endblock %}

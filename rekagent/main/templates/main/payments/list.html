@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load custom_filters %}
 {% block title %}Платежи{% endblock %}
 {% block content %}
 <h2>{% if user.profile.role == 'client' %}Мои платежи{% else %}Список платежей{% endif %}</h2>
@@ -33,9 +34,7 @@
                     {% with total=payment.order.service.price|floatformat:2|default:0|stringformat:"f"|add:"0" %}
                     {% with discount=payment.order.discount|default:0|stringformat:"f"|add:"0" %}
                     {% with quantity=payment.order.quantity|stringformat:"f"|add:"0" %}
-                    {{
-                    total|floatformat:2|multiply:quantity|multiply:discount|divide:100|subtract:from:total|floatformat:2
-                    }}
+                    {{ total|multiply:quantity|multiply:discount|divide:100|subtract_from:total|floatformat:2 }}
                     {% endwith %}
                     {% endwith %}
                     {% endwith %}
@@ -55,5 +54,9 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">Назад</a>
 </div>
 {% endblock %}

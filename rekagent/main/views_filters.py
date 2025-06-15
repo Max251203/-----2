@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Order, PaymentOrder
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from decimal import Decimal
 
 
 def is_staff_or_admin(user):
@@ -11,11 +12,24 @@ def is_staff_or_admin(user):
 @login_required
 @user_passes_test(is_staff_or_admin)
 def orders_by_period(request):
-    # Значения по умолчанию
-    end_date = date.today()
-    start_date = end_date - timedelta(days=30)
+    # Получаем параметры из запроса или устанавливаем значения по умолчанию
+    try:
+        start_date_str = request.GET.get('start_date')
+        if start_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        else:
+            start_date = date.today() - timedelta(days=30)
+    except (ValueError, TypeError):
+        start_date = date.today() - timedelta(days=30)
 
-    # Здесь должна быть обработка формы, но пока упрощаем
+    try:
+        end_date_str = request.GET.get('end_date')
+        if end_date_str:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+        else:
+            end_date = date.today()
+    except (ValueError, TypeError):
+        end_date = date.today()
 
     orders = Order.objects.filter(
         date_received__gte=start_date,
@@ -23,7 +37,7 @@ def orders_by_period(request):
     ).order_by('-date_received')
 
     # Расчет итоговой суммы для каждого заказа
-    total_sum = 0
+    total_sum = Decimal('0.00')
     for order in orders:
         if order.service.price:
             price = order.service.price
@@ -33,7 +47,7 @@ def orders_by_period(request):
             order.total = order_total
             total_sum += order_total
         else:
-            order.total = 0
+            order.total = Decimal('0.00')
 
     return render(request, 'main/filters/orders_by_period.html', {
         'orders': orders,
@@ -46,11 +60,24 @@ def orders_by_period(request):
 @login_required
 @user_passes_test(is_staff_or_admin)
 def payments_by_period(request):
-    # Значения по умолчанию
-    end_date = date.today()
-    start_date = end_date - timedelta(days=30)
+    # Получаем параметры из запроса или устанавливаем значения по умолчанию
+    try:
+        start_date_str = request.GET.get('start_date')
+        if start_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        else:
+            start_date = date.today() - timedelta(days=30)
+    except (ValueError, TypeError):
+        start_date = date.today() - timedelta(days=30)
 
-    # Здесь должна быть обработка формы, но пока упрощаем
+    try:
+        end_date_str = request.GET.get('end_date')
+        if end_date_str:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+        else:
+            end_date = date.today()
+    except (ValueError, TypeError):
+        end_date = date.today()
 
     payments = PaymentOrder.objects.filter(
         date_paid__gte=start_date,
@@ -58,7 +85,7 @@ def payments_by_period(request):
     ).order_by('-date_paid')
 
     # Расчет итоговой суммы для каждого платежа
-    total_sum = 0
+    total_sum = Decimal('0.00')
     for payment in payments:
         order = payment.order
         if order.service.price:
@@ -69,7 +96,7 @@ def payments_by_period(request):
             payment.total = payment_total
             total_sum += payment_total
         else:
-            payment.total = 0
+            payment.total = Decimal('0.00')
 
     return render(request, 'main/filters/payments_by_period.html', {
         'payments': payments,
